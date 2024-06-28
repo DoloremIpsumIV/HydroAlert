@@ -72,9 +72,72 @@ If it was however needed to be implemented into other bigger projects, and there
 If you desire to set up your own Ubidots dashboard similar to mine, the [this tutorial](https://hackmd.io/@lnu-iot/r1k63jjwo) is the one i used.
 
 ## The Code
-How is the data transmitted to the internet or local server? Describe the package format. All the different steps that are needed in getting the data to your end-point. Explain both the code and choice of wireless protocols.
 
+[Github link to the main code](https://github.com/DoloremIpsumIV/HydroAlert/tree/main)
+#### Code Description
 
+The code connects to WiFi and reads data from the DHT11 temperature and humidity sensor on the MCU. It sends the temperature data to Ubidots and flashes an LED if the temperature exceeds 25°C. `keys.py`, `DEVICE_LABEL` and `VARIABLE_LABEL` in main are the only things that you need to change for the code to work.
+
+#### Core functions and components
+
+*  **Imported Statements and variables**
+    ```python
+    import network
+    import urequests as requests
+    import keys
+    from time import sleep
+    import dht
+    import machine
+    DEVICE_LABEL = "name for your device" 
+    VARIABLE_LABEL = "variable name that you name in Ubidots"  
+    ```
+
+     `network`, `urequests`, `keys`, `time`, `dht`, and `machine` are imported to manage network connections, HTTP requests, store WiFi credentials, handle timing, interact with the DHT11 sensor, and control GPIO pins respectively. The keys library is a seperate file that contains private information `keys.py`, the format is like this, you will need to switch it out for your own network SSID and so on:
+
+    ```python
+    WIFI_SSID = "your public wifi name"
+    WIFI_PASS = "password123"
+    TOKEN = "this is the personal token from Ubidots for their API"
+    ```
+    You will also need to change the `DEVICE_LABEL` and `VARIABLE_LABEL` to what you've named them in Ubidots so that they match properly. These can be found at the top of the `main.py` file.
+*  **Initializing Sensors and Actuators**
+    ```python
+    tempSensor = dht.DHT11(machine.Pin(27))
+    led = machine.Pin(0, machine.Pin.OUT)
+    ```
+
+    Turns on the pins, note that the pin numbers are different from the ones used on the board, this is because the digital pins and the ones on the board uses different numbers.
+
+*  **Main Script Execution**
+    ```python
+    if __name__ == "__main__":
+        connect()
+    
+        while True:
+            try:
+                tempSensor.measure()
+                temperature = tempSensor.temperature()
+                humidity = tempSensor.humidity()
+                print("Temperature is {} degrees Celsius and Humidity is {}%".format(temperature, humidity))
+                
+                returnValue = sendData(DEVICE_LABEL, VARIABLE_LABEL, temperature)
+                
+                if temperature >= 25:
+                    flash_led(5, 0.5)
+    
+                sleep(DELAY)
+            except Exception as error:
+                print("Exception occurred:", error)
+                sleep(2)
+    ```
+
+    After connecting to WiFi, measuring the temperature and humidity, it sends the data to Ubidots, and flashes the LED if the temperature exceeds 25°C. This process repeats every 30 minutes. You can change the duration in a variable called `duration` at the top of the main script (it's calculated in seconds). You can also change the temperature in the `if` statement if you think it's too high/low.
+
+### Data Transmission and Protocols
+
+- **Data Transmission:** Data is sent to Ubidots via HTTP POST requests.
+- **Package Format:** JSON format, which includes the device label, variable label, and sensor value.
+- **Wireless Protocol:** WiFi (IEEE 802.11) is used to connect the device to the internet and transmit data.
 
 ## Transmitting the data / connectivity
 How is the data transmitted to the internet or local server? Describe the package format. All the different steps that are needed in getting the data to your end-point. Explain both the code and choice of wireless protocols.
