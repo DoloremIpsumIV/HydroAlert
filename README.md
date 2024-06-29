@@ -11,6 +11,7 @@ If you feel inclined to spend roughly 2-3 hours on a small project and if you ha
 
 #### Why did I make this?
 I have a few reasons as for why i built the **HydroAlert**, the main thing is that i just moved into a new appartment, and it has two windows aimed directly at the sun for a majority of the day. Ontop of this I am unable to create a draft, making my student apartment into a (hopefully) unintentional heatsink... 
+
 My appartment is usually 3-4 degrees celsius warmer than it is outside, and getting the warmth out, even during the night, is very difficult. This means that i sweat alot, and i am constantly in a mild agony due to the high heat. Therfore i decided to use the limited components i had at my disposal to create something that is actually useful to me, by giving me a reminder to drink water at constant intervals. 
 
 Other reasons as to why i built this thing is because i had bought a LoRaWAN antenna before starting my IoT course, but it didn't cover my area due to how thick my walls are, otherwise i had intended to make use of that. I simply had to make something that connects to my PC with a USB cable and so i decided to make something quite practical. 
@@ -50,7 +51,9 @@ In the [previously linked tutorial](https://hackmd.io/@lnu-iot/rkiTJj8O9) tutori
 
 
 #### 3: How the Code is uploaded to the MCU
-The steps necessary for flashing an MCU is quite easy. First, you will need to download the latest firmware from the [official MicroPython webbsite](https://micropython.org/download/RPI_PICO_W/) in order for it to run properly. Connect the USB to the MCU, not the PC, make sure the two tiny pins are facing up so that it locks nicely into place. It won't go all the way in, and if you ever feel like removing it you need to apply a little bit of pressure to remove it from the MCU, but do this **carefully**. There will be a small white button labeled *BOOTSEL*, hold this button in whilst connecting the MCU to your PC. Release the button when a new drive is availible, copy the downloaded drivers into RPI-RP2, the board will then be ready for use. This can be tested by removing and connecting the USB cable. The MCU should then be visible as a device under the PyMakr plugin in VSC. Connect the device and create a terminal to test if it works by using the `print("test")` statement. I used [this tutorial](https://hackmd.io/@lnu-iot/rkFw7gao_#Visual-Studio-Code) in order to set my system up.
+The steps necessary for flashing an MCU is quite easy. First, you will need to download the latest firmware from the [official MicroPython webbsite](https://micropython.org/download/RPI_PICO_W/) in order for it to run properly. Connect the USB to the MCU, not the PC, make sure the two tiny pins are facing up so that it locks nicely into place. It won't go all the way in, and if you ever feel like removing it you need to apply a little bit of pressure to remove it from the MCU, but do this **carefully**.
+
+There will be a small white button labeled *BOOTSEL*, hold this button in whilst connecting the MCU to your PC. Release the button when a new drive is availible, copy the downloaded drivers into RPI-RP2, the board will then be ready for use. This can be tested by removing and connecting the USB cable. The MCU should then be visible as a device under the PyMakr plugin in VSC. Connect the device and create a terminal to test if it works by using the `print("test")` statement. I used [this tutorial](https://hackmd.io/@lnu-iot/rkFw7gao_#Visual-Studio-Code) in order to set my system up.
 
 ### Putting Everything Together
 Due to the fact that this is a very simple project, it requires no knowledge of ressistors or that sort, it's all about connecting the wires so that they add up with the provided python code down below. I tried my best to visualise how my setup is made, but due to software restrictions i could not get a propper visualisation with the correct components. This setup is very much made for estetic reasons and could be used with less recources, like only using 3 wires for example. Therfore it is not suitable for any sort of large scale production.
@@ -58,7 +61,9 @@ Due to the fact that this is a very simple project, it requires no knowledge of 
 #### Circuit Diagram
 This circut diagram uses an *Arduino Nano (Rev3.0)* and a *LM35 Temperature Sensor* because i couldn't get access to the actuall *Raspberry Pi Pico WH* and *DHT11*, but it uses the same setup with the wires. You should therfore connect the pins to the MCU acording to this text and not the image, as it may not represent the MCU correctly. 
 ![Skärmbild 2024-06-28 232217](https://hackmd.io/_uploads/SJh5FsnIA.png)
-On the *Raspberry Pi Pico WH* and *DHT11* there are pins that are numbered from 1 to 40 (shown below), this means that you should make sure that the wires are correctly added acording to these pins and not the number of pins on the image. For the *DHT11 sensor*, make sure that the blue wire is in the 38th pin on the right side of the board. This should connect to the left side of the sensor leg. The red wire should be on the 36th pin, and be connected to the ground in the middle. The black wire should be connected to the 32nd pin, and connect to the right leg. The LED light doesn't necessarily need wires, but i used them in order to place the light as far away on the components, as i only want the light visible in the front, so it's purely estetic. When connecting the LED, it's important that the 1 and 3 pin is connected, this means that power and ground can turn on the LED without problems.
+On the *Raspberry Pi Pico WH* and *DHT11* there are pins that are numbered from 1 to 40 (shown below), this means that you should make sure that the wires are correctly added acording to these pins and not the number of pins on the image. For the *DHT11 sensor*, make sure that the blue wire is in the 38th pin on the right side of the board. This should connect to the left side of the sensor leg. The red wire should be on the 36th pin, and be connected to the ground in the middle. The black wire should be connected to the 32nd pin, and connect to the right leg. 
+
+The LED light doesn't necessarily need wires, but i used them in order to place the light as far away on the components, as i only want the light visible in the front, so it's purely estetic. When connecting the LED, it's important that the 1 and 3 pin is connected, this means that power and ground can turn on the LED without problems.
 ![pico_pinout](https://hackmd.io/_uploads/rJzM6o28A.png)
 [Link to image source](https://www.google.com/url?sa=i&url=https%3A%2F%2Fdocs.micropython.org%2Fen%2Flatest%2Frp2%2Fquickref.html&psig=AOvVaw0YS1stDm02GHQClrH3wqFZ&ust=1719697000572000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCKjC3tmg_4YDFQAAAAAdAAAAABAE)
 
@@ -89,7 +94,7 @@ The code connects to WiFi and reads data from the DHT11 temperature and humidity
     import dht
     import machine
     DEVICE_LABEL = "name for your device" 
-    VARIABLE_LABEL = "variable name that you name in Ubidots"  
+    VARIABLE_LABEL = "variable name that you choose in Ubidots"  
     ```
 
      `network`, `urequests`, `keys`, `time`, `dht`, and `machine` are imported to manage network connections, HTTP requests, store WiFi credentials, handle timing, interact with the DHT11 sensor, and control GPIO pins respectively. The keys library is a seperate file that contains private information `keys.py`, the format is like this, you will need to switch it out for your own network SSID and so on:
@@ -133,24 +138,29 @@ The code connects to WiFi and reads data from the DHT11 temperature and humidity
 
     After connecting to WiFi, measuring the temperature and humidity, it sends the data to Ubidots, and flashes the LED if the temperature exceeds 25°C. This process repeats every 30 minutes. You can change the duration in a variable called `duration` at the top of the main script (it's calculated in seconds). You can also change the temperature in the `if` statement if you think it's too high/low.
 
-### Data Transmission and Protocols
-
-- **Data Transmission:** Data is sent to Ubidots via HTTP POST requests.
-- **Package Format:** JSON format, which includes the device label, variable label, and sensor value.
-- **Wireless Protocol:** WiFi (IEEE 802.11) is used to connect the device to the internet and transmit data.
-
-## Transmitting the data / connectivity
+## Transmitting the data 
 How is the data transmitted to the internet or local server? Describe the package format. All the different steps that are needed in getting the data to your end-point. Explain both the code and choice of wireless protocols.
+
+### Data Transmission and Protocols
+The data that is sent from the MCU uses a connection to your home WiFi network. This means that it doesn't required any other external components like LoRaWan, and it technically doesn't need a USB connection to your PC if you ha an external battery, though I don't do this.  The previous chapter **The Code** describes what variables you need to change in order to make sure that your WiFi is connected to the MCU. 
+
+
 #### How often is the data sent?
-#### Which wireless protocols did you use (WiFi, LoRa, etc …)?
-#### Which transport protocols were used (MQTT, webhook, etc …)
+The data is determined by the ``duration`` variable, due to it being 30 minutes, it will naturally send data every half an hour to ubidots. This is done using a WiFi network that it connects to using the aforementioned `keys.py` file. I think it's reasonable to only send the data every 30 minutes, but a different method could be that the LED blinks every 30 minutes, but temperature data gets sent every 10 minutes or so in order to build up a more accurate temperature fluctuation graph, but I did not see this as necessary. 
+#### Webhooks
+The API key is disscussed breifly in the previous chapter, but it requires that you make an account in [Ubidots](https://ubidots.com/) and under the account settings, you should be able to find your personal API key. The key uses Webhooks in order to send small packages of **JSON** data that the website can parse, regaining the original data again, i.e the temperature readings. Webhooks are fine for the small scale usage of this specific project, a local server would be better at maintaining higher levels of data transfer and handling. This is why I choose Webhooks, it's simple, easy and does it's required job. 
 
 ## Presenting the data
-Describe the presentation part. How is the dashboard built? How long is the data preserved in the database?
-#### Provide visual examples on how the dashboard looks. Pictures needed.
-#### How often is data saved in the database.
+![Skärmbild 2024-06-29 113430](https://hackmd.io/_uploads/HJ6tr8pL0.png)
+To be frank, I didn't spend too much time customizing the look of my *Dashboard* as I didn't find it to be as crucial as the main project. Therfore it's better to just show it as more of a visual representation of what the MCU does. The components i've used are the *Line chart*, *Gauge* and an *Indicator*, the indicator is basically just a graphical representation of the LED light, due to it turning on if it's above 25 C°. 
 
-## Putting Everything Together
-Show the final results of your project. Give your final thoughts on how you think the project went. What could have been done in an other way, or even better? Pictures are nice!
-#### Show final results of the project
-#### Pictures
+The data that I send to the dashboard is determined by the duration variable, so every 30 minutes. The data that is saved on Ubidots should last for roughly a month acording to [this article](https://help.ubidots.com/en/articles/636669-how-long-is-my-data-stored-for). This means that long term storage isn't availible unless I were to pay for a plan, which i will not do for this project. 
+
+## The | HydroAlarm | visualised and done
+The final design is a very basic, but effective, alarm. It uses a bit too many wires, as if you wantet to be efficent, you could simply stick the LED next to the MCU. However, i think it looks a little better this way, escpecially on my desk where only the LED is visible, as i have the wires and the board behind my screen to hide the semi ugly design. 
+![20240628_232348-min](https://hackmd.io/_uploads/Sk7oKLpIR.jpg)
+There are certanly things that could be improved, one could be having a battery connection. This could turn it into a sort of portable temperature detector, where it warns you if it's too hot or not. If you where to bring it then it would struggle with WiFi connections, but that's why you could implement a LoRaWan solution, which was my original plan, which ultimately fell trough.
+![20240628_232356-min](https://hackmd.io/_uploads/ryvJq868R.jpg)
+I think it looks quite meh and isn't all that impressive, but for someone with zero IoT experience, i'd say it's a good first attempt! I learned a fair few things about IoT, and it's inspired me to try to build other projects in the future. 
+
+### Thank you for reading!
